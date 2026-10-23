@@ -1,14 +1,29 @@
-import { supabase } from '@/app/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
-// Busca el id del cliente (negocio) por su nombre
-async function obtenerClienteId(nombre: string | null) {
+// Crea un cliente de Supabase que actúa "como el usuario que inició sesión".
+// Así las reglas de seguridad (RLS) de la base se aplican a cada pedido.
+function clienteSupabase(request: Request) {
+  const token = request.headers.get('authorization')?.replace('Bearer ', '')
+  if (!token) return null
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { global: { headers: { Authorization: `Bearer ${token}` } } }
+  )
+}
+
+const sinSesion = () =>
+  NextResponse.json({ error: 'Necesitás iniciar sesión' }, { status: 401 })
+
+// Busca el id del negocio por nombre (solo encuentra el propio, por las reglas RLS)
+async function obtenerClienteId(supabase: any, nombre: string | null) {
   if (!nombre) return null
   const { data } = await supabase
     .from('clientes')
     .select('id')
     .eq('nombre', nombre)
-    .single()
+    .maybeSingle()
   return data?.id ?? null
 }
 
@@ -37,8 +52,11 @@ function validar(body: any) {
 
 // LISTAR: /api/vinos?cliente=La Dionisia
 export async function GET(request: Request) {
+  const supabase = clienteSupabase(request)
+  if (!supabase) return sinSesion()
+
   const { searchParams } = new URL(request.url)
-  const clienteId = await obtenerClienteId(searchParams.get('cliente'))
+  const clienteId = await obtenerClienteId(supabase, searchParams.get('cliente'))
   if (!clienteId) {
     return NextResponse.json({ error: 'Cliente no encontrado' }, { status: 404 })
   }
@@ -55,8 +73,11 @@ export async function GET(request: Request) {
 
 // AGREGAR
 export async function POST(request: Request) {
+  const supabase = clienteSupabase(request)
+  if (!supabase) return sinSesion()
+
   const body = await request.json()
-  const clienteId = await obtenerClienteId(body.cliente)
+  const clienteId = await obtenerClienteId(supabase, body.cliente)
   if (!clienteId) {
     return NextResponse.json({ error: 'Cliente no encontrado' }, { status: 404 })
   }
@@ -77,6 +98,9 @@ export async function POST(request: Request) {
 
 // EDITAR
 export async function PUT(request: Request) {
+  const supabase = clienteSupabase(request)
+  if (!supabase) return sinSesion()
+
   const body = await request.json()
   if (!body.id) {
     return NextResponse.json({ error: 'Falta el id' }, { status: 400 })
@@ -99,6 +123,9 @@ export async function PUT(request: Request) {
 
 // ELIMINAR: /api/vinos?id=...
 export async function DELETE(request: Request) {
+  const supabase = clienteSupabase(request)
+  if (!supabase) return sinSesion()
+
   const { searchParams } = new URL(request.url)
   const id = searchParams.get('id')
   if (!id) {

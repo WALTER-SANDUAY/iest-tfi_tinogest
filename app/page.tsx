@@ -25,6 +25,15 @@ const campo = {
   background: 'white',
   color: '#1f2937',
 } as const
+// Igual que fetch, pero adjunta la sesión del usuario para que la API sepa quién es
+async function fetchAuth(url: string, options: RequestInit = {}) {
+  const { data } = await supabase.auth.getSession()
+  const token = data.session?.access_token
+  return fetch(url, {
+    ...options,
+    headers: { ...(options.headers || {}), Authorization: `Bearer ${token}` },
+  })
+}
 
 export default function Home() {
   const router = useRouter()
@@ -48,7 +57,7 @@ export default function Home() {
 
   async function cargarVinos() {
     try {
-      const res = await fetch(`/api/vinos?cliente=${encodeURIComponent(cliente.nombre)}`)
+      const res = await fetchAuth(`/api/vinos?cliente=${encodeURIComponent(cliente.nombre)}`)
       const json = await res.json()
       if (json.data) setVinos(json.data)
       else if (json.error) setError(json.error)
@@ -71,7 +80,7 @@ export default function Home() {
     }
     setCargando(true)
     try {
-      const res = await fetch('/api/vinos', {
+      const res = await fetchAuth('/api/vinos', {
         method: editandoId ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, id: editandoId, cliente: cliente.nombre }),
@@ -111,7 +120,7 @@ export default function Home() {
   async function eliminar(v: Vino) {
     if (!confirm(`¿Eliminar "${v.nombre}"?`)) return
     try {
-      const res = await fetch(`/api/vinos?id=${v.id}`, { method: 'DELETE' })
+      const res = await fetchAuth(`/api/vinos?id=${v.id}`, { method: 'DELETE' })
       if (!res.ok) {
         const json = await res.json()
         setError(json.error || 'No se pudo eliminar')
