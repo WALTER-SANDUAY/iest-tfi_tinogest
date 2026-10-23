@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { supabase } from '@/app/lib/supabase'
 import { cliente } from './config-cliente'
 
 type Vino = {
@@ -25,6 +27,8 @@ const campo = {
 } as const
 
 export default function Home() {
+  const router = useRouter()
+  const [listo, setListo] = useState(false)
   const [form, setForm] = useState(formVacio)
   const [vinos, setVinos] = useState<Vino[]>([])
   const [editandoId, setEditandoId] = useState<string | null>(null)
@@ -32,7 +36,14 @@ export default function Home() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    cargarVinos()
+    supabase.auth.getSession().then(({ data }) => {
+      if (!data.session) {
+        router.replace('/login')
+      } else {
+        setListo(true)
+        cargarVinos()
+      }
+    })
   }, [])
 
   async function cargarVinos() {
@@ -44,6 +55,11 @@ export default function Home() {
     } catch {
       setError('No se pudieron cargar los vinos')
     }
+  }
+
+  async function cerrarSesion() {
+    await supabase.auth.signOut()
+    router.replace('/login')
   }
 
   async function guardar(e: React.FormEvent) {
@@ -111,6 +127,10 @@ export default function Home() {
     setForm({ ...form, [campoNombre]: valor })
   }
 
+  if (!listo) {
+    return <p style={{ textAlign: 'center', padding: '3rem', color: '#4a5568' }}>Cargando...</p>
+  }
+
   return (
     <div style={{ fontFamily: 'sans-serif', minHeight: '100vh', backgroundColor: '#f0f4f8', padding: '2rem' }}>
       <header style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -134,6 +154,12 @@ export default function Home() {
         <p style={{ color: '#4a5568', fontSize: '1.1rem' }}>
           {cliente.rubro} — Sistema TinoGest
         </p>
+        <button
+          onClick={cerrarSesion}
+          style={{ marginTop: '0.75rem', padding: '0.4rem 1rem', border: '1px solid #cbd5e0', background: 'white', color: '#2d3748', borderRadius: '6px', cursor: 'pointer' }}
+        >
+          Cerrar sesión
+        </button>
       </header>
 
       <main
