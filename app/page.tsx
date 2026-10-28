@@ -191,7 +191,7 @@ export default function Home() {
           <input style={campo} placeholder="Cepa (Malbec, Syrah, Torrontés...)" value={form.cepa}
             onChange={(e) => cambiar('cepa', e.target.value)} />
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
-            <input style={campo} type="number" placeholder="Añada" value={form.anada}
+            <input style={campo} type="number" placeholder="Año" value={form.anada}
               onChange={(e) => cambiar('anada', e.target.value)} />
             <input style={campo} type="number" placeholder="Precio $" min="0" value={form.precio}
               onChange={(e) => cambiar('precio', e.target.value)} />
