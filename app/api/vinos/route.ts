@@ -106,9 +106,9 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: 'Falta el id' }, { status: 400 })
   }
 
-  const { valores, error: errorValidacion } = validar(body)
-  if (errorValidacion) {
-    return NextResponse.json({ error: errorValidacion }, { status: 400 })
+    const { valores, error: errorValidacion } = validar(body)
+  if (errorValidacion || !valores) {
+    return NextResponse.json({ error: errorValidacion ?? 'Datos inválidos' }, { status: 400 })
   }
 
   const { data, error } = await supabase
