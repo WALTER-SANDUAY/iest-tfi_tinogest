@@ -40,10 +40,10 @@ function validar(body: any) {
     return { error: 'El stock debe ser un número entero, 0 o más' }
   }
 
-  const anada =
+    const anada =
     body.anada === '' || body.anada == null ? null : Number(body.anada)
   if (anada !== null && (!Number.isInteger(anada) || anada < 1900 || anada > 2100)) {
-    return { error: 'La añada no es válida' }
+    return { error: 'El Año no es válido' }
   }
 
   const cepa = String(body.cepa ?? '').trim() || null
