@@ -52,7 +52,7 @@ export default function Login() {
           <div className="logo-wrap">
             <Image src="/logo.png" alt="Logo TinoGest" width={120} height={120} priority className="logo" />
           </div>
-          <span className="marcas-x">×</span>
+          <span className="marcas-x" style={{ fontSize: '0.9rem', textAlign:   'center' }}>Trabajando con</span>
           <Image src={cliente.logo} alt={`Logo ${cliente.nombre}`} width={120} height={120} priority style={{ objectFit: 'contain' }} />
         </div>
         <h1 style={{ color: '#1a365d', fontSize: '2rem', margin: '1rem 0 0.5rem' }}>{cliente.nombre}</h1>

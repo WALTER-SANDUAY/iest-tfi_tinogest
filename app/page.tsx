@@ -147,7 +147,7 @@ export default function Home() {
           <div className="logo-wrap">
             <Image src="/logo.png" alt="Logo TinoGest" width={140} height={140} priority className="logo" />
           </div>
-          <span className="marcas-x">×</span>
+          <span className="marcas-x" style={{ fontSize: '0.9rem', textAlign: 'center' }}>Trabajando con</span>
           <Image
             src={cliente.logo}
             alt={`Logo ${cliente.nombre}`}
