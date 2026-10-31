@@ -16,6 +16,10 @@ type Vino = {
 
 const formVacio = { nombre: '', cepa: '', anada: '', precio: '', stock: '' }
 
+const CEPAS = ['Malbec', 'Cabernet Sauvignon', 'Syrah', 'Bonarda', 'Merlot', 'Pinot Noir', 'Torrontés', 'Chardonnay', 'Sauvignon Blanc']
+const ANIO_ACTUAL = new Date().getFullYear()
+const ANIOS = Array.from({ length: ANIO_ACTUAL - 1990 + 1 }, (_, i) => ANIO_ACTUAL - i)
+
 const campo = {
   width: '100%',
   padding: '0.75rem',
@@ -43,6 +47,7 @@ export default function Home() {
   const [editandoId, setEditandoId] = useState<string | null>(null)
   const [cargando, setCargando] = useState(false)
   const [error, setError] = useState('')
+  const [otraCepa, setOtraCepa] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -102,6 +107,7 @@ export default function Home() {
   function editar(v: Vino) {
     setEditandoId(v.id)
     setError('')
+    setOtraCepa(!!v.cepa && !CEPAS.includes(v.cepa))
     setForm({
       nombre: v.nombre,
       cepa: v.cepa ?? '',
@@ -115,6 +121,7 @@ export default function Home() {
   function cancelar() {
     setEditandoId(null)
     setForm(formVacio)
+    setOtraCepa(false)
   }
 
   async function eliminar(v: Vino) {
@@ -188,11 +195,28 @@ export default function Home() {
         <form onSubmit={guardar} style={{ marginBottom: '2rem', display: 'grid', gap: '0.75rem' }}>
           <input style={campo} placeholder="Nombre del vino" value={form.nombre}
             onChange={(e) => cambiar('nombre', e.target.value)} />
-          <input style={campo} placeholder="Cepa (Malbec, Syrah, Torrontés...)" value={form.cepa}
-            onChange={(e) => cambiar('cepa', e.target.value)} />
+
+          <select style={campo}
+            value={otraCepa ? '__otra' : form.cepa}
+            onChange={(e) => {
+              if (e.target.value === '__otra') { setOtraCepa(true); cambiar('cepa', '') }
+              else { setOtraCepa(false); cambiar('cepa', e.target.value) }
+            }}>
+            <option value="">Cepa</option>
+            {CEPAS.map((c) => <option key={c} value={c}>{c}</option>)}
+            <option value="__otra">Otra...</option>
+          </select>
+          {otraCepa && (
+            <input style={campo} placeholder="Escribí la cepa" value={form.cepa}
+              onChange={(e) => cambiar('cepa', e.target.value)} />
+          )}
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
-            <input style={campo} type="number" placeholder="Año" value={form.anada}
-              onChange={(e) => cambiar('anada', e.target.value)} />
+            <select style={campo} value={form.anada}
+              onChange={(e) => cambiar('anada', e.target.value)}>
+              <option value="">Sin año</option>
+              {ANIOS.map((a) => <option key={a} value={a}>{a}</option>)}
+            </select>
             <input style={campo} type="number" placeholder="Precio $" min="0" value={form.precio}
               onChange={(e) => cambiar('precio', e.target.value)} />
             <input style={campo} type="number" placeholder="Stock" min="0" value={form.stock}
