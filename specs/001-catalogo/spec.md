@@ -36,7 +36,7 @@ con su usuario, y no hay vista pública para clientes.
 ## Casos límite
 - Año fuera de 1900 a 2100: no se guarda y muestra "El año no es válido".
 - Año y cepa vacíos: se permite, son opcionales.
-- Precio 0: se permite (decisión provisoria, pendiente de confirmar).
+- Precio 0: se permite (decisión confirmada por la dueña). 
 - Vino con una cepa que no está en la lista: al editar aparece como "Otra...".
 - Eliminar pide confirmación antes de borrar.
 
