@@ -32,11 +32,12 @@ con su usuario, y no hay vista pública para clientes.
 | RF-09 | El formulario mostrará la cepa en una lista desplegable con la opción "Otra..." que permite escribir un valor libre. | Media |
 | RF-10 | El formulario mostrará el año en una lista desplegable que incluya la opción "Sin año". | Media |
 | RF-11 | Cuando la persona edite un vino, las listas mostrarán seleccionado el valor guardado. | Media |
+| RF-12 | Si el año está fuera del rango 1900 a 2100, el sistema no guardará y mostrará "El año no es válido". | Alta |
 
 ## Casos límite
 - Año fuera de 1900 a 2100: no se guarda y muestra "El año no es válido".
 - Año y cepa vacíos: se permite, son opcionales.
-- Precio 0: se permite (decisión confirmada por la dueña). 
+- Precio 0: se permite (decisión confirmada por la dueña).
 - Vino con una cepa que no está en la lista: al editar aparece como "Otra...".
 - Eliminar pide confirmación antes de borrar.
 
