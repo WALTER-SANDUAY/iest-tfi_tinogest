@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TinoGest
 
-## Getting Started
+Sistema de gestión para emprendedores de Tinogasta. Cada negocio ve solo sus propios datos. Primer cliente: **La Dionisia** (bodega).
 
-First, run the development server:
+- **Sitio publicado:** https://tinogest.vercel.app
+- **Repositorio:** https://github.com/WALTER-SANDUAY/iest-tfi_tinogest
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Qué hace
+- Catálogo de vinos con control de stock (agregar, editar, eliminar).
+- Alerta de stock bajo (10 botellas o menos).
+- Ingreso con usuario y contraseña.
+- Marca blanca: logo de TinoGest y del negocio.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tecnología
+Next.js, React, TypeScript, Supabase (base de datos y login) y Vercel.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Cómo correrlo en tu compu
+1. `npm install`
+2. Crear `.env.local` con `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+3. `npm run dev` y abrir http://localhost:3000
+4. Tests: `npm test`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Documentación
+- `docs/CONSTITUCION.md`: principios del proyecto.
+- `docs/01-CONTEXTO.md` a `docs/10-SEGURIDAD.md`: kit de especificaciones.
+- `docs/ADAPTAR-A-OTRO-NEGOCIO.md`: cómo sumar otro emprendimiento.
+- `docs/PROMPTS.md` y `docs/DECLARACION-IA.md`: uso responsable de la IA.
+- `specs/001-catalogo/`: spec, clarificación, plan, tareas y verificación.
+- `AGENTS.md`, `CLAUDE.md`, `memory.md`, `.claude/`: arnés del agente.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Autor
+Walter Elías Sanduay. Trabajo Final Integrador, IEST Tinogasta.
