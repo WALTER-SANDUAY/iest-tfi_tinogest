@@ -1,4 +1,17 @@
 :root {
+  --color-primario: #1565c0;
+  --color-primario-oscuro: #1a365d;
+  --color-secundario: #2e9e3f;
+  --color-fondo: #f0f4f8;
+  --color-superficie: #ffffff;
+  --color-texto: #1f2937;
+  --color-texto-suave: #718096;
+  --color-borde: #e2e8f0;
+  --color-peligro: #c53030;
+  --color-ok: #2f855a;
+}
+
+:root {
   --background: #f1f5f9;
   --foreground: #1f2937;
   color-scheme: light;
