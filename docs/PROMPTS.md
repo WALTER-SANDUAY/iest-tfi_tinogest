@@ -34,6 +34,15 @@ Regla: ningún código se aceptó sin leerlo y probarlo.
 - **Qué pasó:** en Vercel cargué la dirección de Supabase en el campo Key y la clave en Value.
 - **Cómo lo detecté:** revisé la captura antes de desplegar.
 - **Cómo lo corregí:** Key lleva siempre el nombre de la variable.
+- **Quién se equivocó:** yo, al copiar los datos; la IA había dado los pasos bien.
+
+### Error 5: código que la IA no podía verificar contra mi base
+- **Qué hizo mal:** en una práctica, la IA escribió una ruta con `createClient()` sin importarlo y asumió columnas (`contenido`, `created_at`) que mi tabla no tenía (tenía `titulo`, `descripcion` y `creado_en`). También sugirió una librería en desuso (`auth-helpers-nextjs`).
+- **Cómo lo detecté:** el editor marcó el import faltante, el navegador mostró "Module not found" y la API devolvió "column created_at does not exist".
+- **Cómo lo corregí:** usé `@supabase/supabase-js`, un solo cliente exportado y las columnas reales de la tabla.
+
+- **Aprendizaje:** la IA no ve mi base de datos; sus supuestos se contrastan con datos reales.
 
 ## Lección general
 La IA propone, yo reviso. Cada cambio se probó en local, con build y tests, antes de subirlo.
+
